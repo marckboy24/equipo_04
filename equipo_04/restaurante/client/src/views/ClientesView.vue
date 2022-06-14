@@ -71,25 +71,20 @@ export default { //Definir propiedades del archivo
             { text: 'Cantidad de personas', value: 'cli_cantidad' },
             { text: 'Mesa del cliente(s)', value: 'cli_mesa_id' },
             { text: 'Acciones', value: 'actions', sortable:false}
-
-
           ],
-          clientes: [{
-            cli_id:1,
-            cli_nombre:'Humberto',
-            cli_cantidad: 4,
-            cli_mesa_id: 4
-          },
-          {
-            cli_id:2,
-            cli_nombre:'Mónica',
-            cli_cantidad: 4,
-            cli_mesa_id: 4
-          }],
+          clientes: [],
           nc_dialog: false
         }
     },
+    created(){
+        this.llenar_clientes();
+    },
+
     methods:{
+      async llenar_clientes(){
+          const api_data = await this.axios.get('clientes/mostrar_clientes');
+          this.clientes = api_data.data;
+      },
       cancelar(){
           this.nc_dialog = false;
       }

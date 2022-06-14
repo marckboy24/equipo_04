@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../connection');
 
-router.get('/mostar_meseros', async(req, res) => {
+router.get('/mostrar_meseros', async(req, res) => {
       try{
           const query = 'SELECT * FROM mesero';
           const meseros = await connection.query(query);

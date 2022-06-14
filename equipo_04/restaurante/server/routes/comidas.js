@@ -16,4 +16,18 @@ router.get('/mostrar_comidas', async(req, res) => {
       }
 });
 
+router.delete('/eliminar_comida', async(req, res) => {
+      try{
+          const com_id = req.body.com_id;
+          const query = 'DELETE FROM comida WHERE com_id = ?';
+          const result = await connection.query(query, [com_id]);
+          res.json('Comida eliminada');
+      }
+      catch(error){
+          res.json({
+              error:error
+          });
+      }
+});
+
 module.exports = router;

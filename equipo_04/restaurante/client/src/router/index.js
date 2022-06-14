@@ -23,9 +23,14 @@ const routes = [
 
   },
   {
-    path: '/menu',
-    name: 'menu',
-    component: () => import('../views/MenuView.vue')
+    path: '/comidas',
+    name: 'comidas',
+    component: () => import('../views/ComidasView.vue')
+  },
+  {
+    path: '/bebidas',
+    name: 'bebidas',
+    component: () => import('../views/BebidasView.vue')
   },
   {
     path: '/mesa',

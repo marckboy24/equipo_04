@@ -23,6 +23,7 @@ router.get('/mostrar_ordenes', async(req, res) => {
               error:error
           });
       }
+      return;
 });
 
 router.delete('/eliminar_orden', async(req, res) => {
@@ -50,6 +51,7 @@ router.post('/nueva_orden', async(req, res) => {
           res.json({
               error:error
           });
+
       }
 });
 

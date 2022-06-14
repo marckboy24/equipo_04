@@ -14,6 +14,9 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{item}">
+              <v-icon @click="" small class="mr-3">
+                  fas fa-plus
+              </v-icon>
                 <v-icon @click="" small class="mr-3">
                     fas fa-eye
                 </v-icon>
@@ -36,18 +39,29 @@
                     <v-container>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_orden.ord_mesa_id" label="Mesa asignada" clearable required>
-                                </v-text-field>
+                                <v-select
+                                        :items="mesas"
+                                        v-model="nueva_orden.ord_mesa_id"
+                                        label="Mesa asignada" required>
+                                </v-select>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_orden.ord_meser_encargado" label="Mesero encargado" clearable required>
-                                </v-text-field>
+                                <v-select
+                                        :items="meseros"
+                                        v-model="nueva_orden.ord_meser_encargado"
+                                        label="Mesero encargado" required
+                                >
+                                </v-select>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_orden.ord_cli_info" label="Cliente" clearable required>
-                                </v-text-field>
+                                <v-select
+                                        :items="clientes"
+                                        v-model="nueva_orden.ord_cli_info"
+                                        label="Cliente" required
+                                >
+                                </v-select>
                             </v-col>
                             <v-col cols="'6'">
                                 <v-text-field v-model="nueva_orden.ord_estado" label="Estado de la orden" clearable required>
@@ -89,6 +103,9 @@ export default { //Definir propiedades del archivo
 
           ],
           ordenes: [],
+          mesas: [],
+          meseros: [],
+          clientes: [],
           no_dialog: false,
           nueva_orden:{
               ord_mesa_id:'',
@@ -100,8 +117,39 @@ export default { //Definir propiedades del archivo
     },
     created(){
         this.llenar_ordenes();
+        this.llenar_mesas();
+        this.llenar_meseros();
+        this.llenar_clientes();
+
     },
     methods:{
+        async llenar_mesas(){
+            const api_data = await this.axios.get('mesa/mostrar_mesas');
+            api_data.data.forEach((item) => {
+                this.mesas.push({
+                    text: 'Mesa ' + item.mesa_id + ' (Capacidad: ' + item.mesa_capacidad + ' )',
+                    value: item.mesa_id
+                });
+            });
+        },
+        async llenar_meseros(){
+            const api_data = await this.axios.get('meseros/mostrar_meseros');
+            api_data.data.forEach((item) => {
+                this.meseros.push({
+                    text: item.meser_id + ' - ' + item.meser_nombre + ' ' + item.meser_ap_pat,
+                    value: item.meser_id
+                });
+            });
+        },
+        async llenar_clientes(){
+            const api_data = await this.axios.get('clientes/mostrar_clientes');
+            api_data.data.forEach((item) => {
+                this.clientes.push({
+                    text: item.cli_id + ' - ' + item.cli_nombre,
+                    value: item.cli_id
+                });
+            });
+        },
         async llenar_ordenes(){
             const api_data = await this.axios.get('ordenes/mostrar_ordenes');
             this.ordenes = api_data.data;
@@ -114,6 +162,7 @@ export default { //Definir propiedades del archivo
             this.llenar_ordenes();
         },
         async guardar_orden(){
+            console.log("guardar_orden función");
             await this.axios.post('ordenes/nueva_orden', this.nueva_orden);
             this.llenar_ordenes();
             this.cancelar();

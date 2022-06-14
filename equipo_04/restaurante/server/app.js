@@ -19,7 +19,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Rutas de la página
 app.use('/mesa', require('./routes/mesa'));
 app.use('/clientes', require('./routes/clientes'));
-app.use('/comidas', require('./routes/comidas'))
+app.use('/comidas', require('./routes/comidas'));
+app.use('/bebidas', require('./routes/bebidas'));
 app.use('/ordenes', require('./routes/ordenes'));
 app.use('/meseros', require('./routes/meseros'));
 

@@ -1,6 +1,6 @@
 <template>
     <v-container>
-      Login
+      Acciones rápidas
           <v-data-table
               :headers="headers"
               :items="desserts"

@@ -38,8 +38,13 @@
                         </v-row>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nuevo_cliente.cli_mesa_id" label="Mesa asignada" required>
-                                </v-text-field>
+                                <v-select
+                                        :items="mesas"
+                                        v-model = "nuevo_cliente.cli_mesa_id"
+                                        label = "Mesa asignada" required
+                                >
+                                </v-select>
+
                             </v-col>
                         </v-row>
                     </v-container>
@@ -83,10 +88,21 @@ export default { //Definir propiedades del archivo
         }
     },
     created(){
+        this.llenar_mesas();
         this.llenar_clientes();
     },
 
     methods:{
+      async llenar_mesas(){
+          const api_data = await this.axios.get('mesa/mostrar_mesas');
+          api_data.data.forEach((item) => {
+              this.mesas.push({
+                  text: 'Mesa ' + item.mesa_id + ' (Capacidad: ' + item.mesa_capacidad + ' )',
+                  value: item.mesa_id
+              });
+          });
+      },
+
       async llenar_clientes(){
           const api_data = await this.axios.get('clientes/mostrar_clientes');
           this.clientes = api_data.data;

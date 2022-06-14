@@ -17,9 +17,25 @@ const routes = [
 
   },
   {
+    path: '/ordenes',
+    name: 'ordenes',
+    component: () => import('../views/OrdenesView.vue')
+
+  },
+  {
+    path: '/menu',
+    name: 'menu',
+    component: () => import('../views/MenuView.vue')
+  },
+  {
     path: '/mesa',
     name: 'mesa',
     component: () => import('../views/MesaView.vue')
+  },
+  {
+    path: '/meseros',
+    name: 'meseros',
+    component: () => import('../views/MeserosView.vue')
   }
 ]
 

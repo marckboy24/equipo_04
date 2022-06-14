@@ -32,10 +32,10 @@
       <v-row class="my-5">
         <v-spacer></v-spacer>
         <router-link :to="{ name: 'clientes'}" class="mr-5">Clientes</router-link>
-        <router-link :to="{ name: ''}" class="mr-5">Ordenes</router-link>
-        <router-link :to="{ name: ''}" class="mr-5">Menú</router-link>
+        <router-link :to="{ name: 'ordenes'}" class="mr-5">Ordenes</router-link>
+        <router-link :to="{ name: 'menu'}" class="mr-5">Menú</router-link>
         <router-link :to="{ name: 'mesa'}" class="mr-5">Mesas</router-link>
-        <router-link :to="{ name: ''}" class="mr-5">Meseros</router-link>
+        <router-link :to="{ name: 'meseros'}" class="mr-5">Meseros</router-link>
 
         <v-spacer></v-spacer>
       </v-row>

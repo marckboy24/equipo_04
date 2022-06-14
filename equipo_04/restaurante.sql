@@ -189,28 +189,60 @@ VALUES('1', '2022-03-15', '23:34:33', '120'),
 
 #--------------------CONSULTAS--------------------
 
-#a) SELECT que muestre todas las órdenes por mesero con el total de venta para una fecha determinada
+#a) SELECT que muestra las órdenes por mesero con el total de venta para una fecha determinada
+#Recuperando uno en específico
 SELECT mesero.meser_id, mesero.meser_nombre, orden.ord_id, cuenta.cuen_fecha,
-		SUM(cuenta.cuen_total) AS Total_de_venta
-	FROM orden
-	LEFT JOIN mesero
-		ON mesero.meser_id = 1
+		SUM(cuenta.cuen_total) AS Total_de_venta,
+        COUNT(orden.ord_meser_id) AS Ordenes_por_mesero
+	FROM mesero
+	LEFT JOIN orden
+		ON orden.ord_meser_id = 1
 	LEFT JOIN cuenta
 		ON orden.ord_id = cuenta.cuen_ord_id
         WHERE cuenta.cuen_fecha = '2022-03-15'
-        AND orden.ord_meser_id = mesero.meser_id;
+        AND orden.ord_meser_id = mesero.meser_id
+	GROUP BY mesero.meser_id;
 
-#b) SELECT que muestre todas las órdenes por mesa con el total de venta para una fecha determinada     
-SELECT mesa.mesa_id,
-		COUNT(orden.ord_mesa_id) AS numero_de_ordenes_por_mesa,
-		SUM(cuenta.cuen_total) AS total_cuentas
+#Recuperando todos
+SELECT mesero.meser_id, mesero.meser_nombre, orden.ord_id, cuenta.cuen_fecha,
+		SUM(cuenta.cuen_total) AS Total_de_venta,
+        COUNT(orden.ord_meser_id) AS Ordenes_por_mesero
+	FROM mesero
+	LEFT JOIN orden
+		ON mesero.meser_id = orden.ord_meser_id 
+	LEFT JOIN cuenta
+		ON orden.ord_id = cuenta.cuen_ord_id
+        WHERE cuenta.cuen_fecha = '2022-03-15'
+        AND orden.ord_meser_id = mesero.meser_id
+	GROUP BY mesero.meser_id;
+
+#b)SELECT que muestre las órdenes por mesa con el total de venta para una fecha determinada
+
+#Recuperando una en específico
+SELECT mesa_id, 
+		SUM(cuenta.cuen_total) AS total_venta
 	FROM mesa
-	INNER JOIN orden
-		ON mesa.mesa_id = orden.ord_mesa_id
+    INNER JOIN orden
+		ON mesa.mesa_id = 2
 	INNER JOIN cuenta
-		ON orden.ord_id = cuenta.cuen_ord_id;
+		ON orden.ord_id = cuenta.cuen_ord_id
+        WHERE cuenta.cuen_fecha = '2022-03-15'
+        AND orden.ord_mesa_id = mesa.mesa_id
+	GROUP BY mesa_id;
     
-#c) SELECT que muestre el total de órdenes y de venta para una fecha determinada
+#Recuperando todas las mesas
+SELECT mesa_id, 
+		SUM(cuenta.cuen_total) AS total_venta
+	FROM mesa
+    INNER JOIN orden
+		ON orden.ord_mesa_id = mesa.mesa_id
+	INNER JOIN cuenta
+		ON orden.ord_id = cuenta.cuen_ord_id
+        WHERE cuenta.cuen_fecha = '2022-03-15'
+        AND orden.ord_mesa_id = mesa.mesa_id
+	GROUP BY mesa_id;
+    
+#c)SELECT que muestre el total de órdenes y de venta para una fecha determinada   
 SELECT 
 		COUNT(det_ord_id) AS numero_de_ordenes_de_una_fecha,
         SUM(cuenta.cuen_total) AS total_venta
@@ -218,10 +250,47 @@ SELECT
 	INNER JOIN cuenta
 		ON detalles.det_ord_id = cuenta.cuen_ord_id
 		WHERE  detalles.det_fecha = '2022-02-15';
-        
-        
-#d) SELECT que muestre el de venta por mes o año
+    
+#d) SELECT que muestre el total de venta por mes o año.    
+
+#Por mes
 SELECT 
-       SUM(cuenta.cuen_total) AS "marzo"  
-            FROM cuenta
-               WHERE cuenta.cuen_fecha BETWEEN '2022-03-01' AND '2022-03-30';
+		MONTH(cuenta.cuen_fecha) AS Mes,
+		SUM(cuenta.cuen_total) AS Total_venta  
+	FROM cuenta
+		WHERE cuenta.cuen_fecha BETWEEN '2022-03-01' AND '2022-03-31';
+        
+#Por año 
+SELECT
+		YEAR(cuenta.cuen_fecha) AS Anio,
+		SUM(cuenta.cuen_total) AS Total_venta  
+	FROM cuenta
+		WHERE cuenta.cuen_fecha BETWEEN '2022-01-01' AND '2023-01-01';
+        
+#----------CONSULTAS ADICIONALES----------
+#1. El número de bebidas alcoholicas que se pidieron en cada mesa, incluyendo su fecha de venta
+SELECT mesa.mesa_id, detalles.det_fecha AS Fecha_venta,
+		COUNT(bebida.beb_id) AS Cantidad_de_bebidas_alcoholicas
+	FROM mesa
+    INNER JOIN orden
+		ON mesa.mesa_id = orden.ord_mesa_id
+	INNER JOIN detalles
+		ON orden.ord_id = detalles.det_ord_id
+	INNER JOIN bebida
+		ON detalles.det_beb_id = bebida.beb_id 
+        WHERE bebida.beb_categoria = 'Coctelería' OR bebida.beb_categoria = 'Cervezas'
+	GROUP BY mesa_id
+    ORDER BY mesa_id;
+    
+#2. El número de clientes en un mes
+SELECT 
+		MONTH(cuenta.cuen_fecha) AS Mes,
+		SUM(clientes.cli_cantidad) AS Numero_de_clientes  
+	FROM clientes
+    INNER JOIN mesa
+		ON clientes.cli_mesa_id = mesa.mesa_id 
+	INNER JOIN orden
+		ON mesa.mesa_id = orden.ord_mesa_id
+	INNER JOIN cuenta
+		ON cuenta.cuen_ord_id = orden.ord_id
+		WHERE cuenta.cuen_fecha BETWEEN '2022-02-01' AND '2022-02-28';

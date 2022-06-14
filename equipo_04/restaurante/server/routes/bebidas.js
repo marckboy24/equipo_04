@@ -31,4 +31,18 @@ router.delete('/eliminar_bebida', async(req, res) => {
       }
 });
 
+router.post('/nueva_bebida', async(req, res) => {
+    try{
+        const body = req.body;
+        const query = 'INSERT INTO bebida (beb_nombre, beb_categoria, beb_cantidad, beb_precio) VALUES(?, ?, ?, ?)';
+        await connection.query(query, [body.beb_nombre, body.beb_categoria, body.beb_cantidad, body.beb_precio]);
+        res.json('Ok, inserción realizada con éxito');
+    }
+    catch(error){
+        res.json({
+            error:error
+        });
+    }
+});
+
 module.exports = router;

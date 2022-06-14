@@ -162,10 +162,12 @@ export default { //Definir propiedades del archivo
             this.llenar_ordenes();
         },
         async guardar_orden(){
-            console.log("guardar_orden función");
+
             await this.axios.post('ordenes/nueva_orden', this.nueva_orden);
             this.llenar_ordenes();
             this.cancelar();
+            console.log("FUNCIÓN GUARDAR ORDEN");
+            console.log(await this.axios.post('ordenes/nueva_orden', this.nueva_orden));
         },
         cancelar(){
             this.nueva_orden = {}

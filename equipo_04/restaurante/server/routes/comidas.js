@@ -17,11 +17,25 @@ router.get('/mostrar_comidas', async(req, res) => {
 });
 
 router.delete('/eliminar_comida', async(req, res) => {
+    try{
+        const com_id = req.body.com_id; //Propiedad body contiene toda la información que se le pasa a la petición
+        const query = 'DELETE FROM comida WHERE com_id = ?';
+        const result = await connection.query(query, [com_id]); //El signo de interrogación será reemplazado por todos los valores del arreglo [lib_id]
+        res.json('Comida eliminada');
+    }
+    catch(error){
+        res.json({
+          error:error
+        });
+    }
+});
+
+router.post('/nueva_comida', async(req, res) => {
       try{
-          const com_id = req.body.com_id;
-          const query = 'DELETE FROM comida WHERE com_id = ?';
-          const result = await connection.query(query, [com_id]);
-          res.json('Comida eliminada');
+          const body = req.body;
+          const query = 'INSERT INTO comida (com_nombre, com_categoria, com_porcion, com_precio) VALUES(?, ?, ?, ?)';
+          await connection.query(query, [body.com_nombre, body.com_categoria, body.com_porcion, body.com_precio]);
+          res.json('Ok, inserción realizada con éxito');
       }
       catch(error){
           res.json({
@@ -29,5 +43,6 @@ router.delete('/eliminar_comida', async(req, res) => {
           });
       }
 });
+
 
 module.exports = router;

@@ -40,13 +40,13 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_orden.ord_meser_id" label="Mesero encargado" clearable required>
+                                <v-text-field v-model="nueva_orden.ord_meser_encargado" label="Mesero encargado" clearable required>
                                 </v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_orden.ord_cli_id" label="Cliente" clearable required>
+                                <v-text-field v-model="nueva_orden.ord_cli_info" label="Cliente" clearable required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="'6'">
@@ -80,8 +80,8 @@ export default { //Definir propiedades del archivo
               value: 'ord_id',
             },
             { text: 'Mesa asignada', value: 'ord_mesa_id' },
-            { text: 'Mesero encargado', value: 'ord_meser_id' },
-            { text: 'Cliente', value: 'ord_cli_id' },
+            { text: 'Mesero encargado', value: 'ord_meser_encargado' },
+            { text: 'Cliente', value: 'ord_cli_info' },
             { text: 'Estado de la orden', value: 'ord_estado', sortable:false},
             { text: 'Acciones', value: 'actions', sortable:false},
             { text: 'Imprimir cuenta', value: 'bill', sortable:false}
@@ -92,8 +92,8 @@ export default { //Definir propiedades del archivo
           no_dialog: false,
           nueva_orden:{
               ord_mesa_id:'',
-              ord_meser_id:'',
-              ord_cli_id:'',
+              ord_meser_encargado:'',
+              ord_cli_info:'',
               ord_estado:''
           }
         }

@@ -73,6 +73,7 @@ export default { //Definir propiedades del archivo
             { text: 'Acciones', value: 'actions', sortable:false}
           ],
           clientes: [],
+          mesas: [],
           nc_dialog: false,
           nuevo_cliente:{
               cli_nombre:'',

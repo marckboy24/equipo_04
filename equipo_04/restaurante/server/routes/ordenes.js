@@ -5,7 +5,16 @@ const connection = require('../connection');
 
 router.get('/mostrar_ordenes', async(req, res) => {
       try{
-          const query = 'SELECT * FROM orden';
+          //const query = 'SELECT * FROM orden';
+          const query = 'SELECT ' +
+                        'o.ord_id, o.ord_mesa_id, ' +
+                        'CONCAT_WS(" ", m.meser_id, "-", m.meser_nombre) AS ord_meser_encargado, ' +
+                        'CONCAT_WS(" ", c.cli_id, "-", c.cli_nombre) AS ord_cli_info, ' +
+                        'o.ord_estado ' +
+                        'FROM orden AS o, mesero AS m, clientes AS c ' +
+                        'WHERE o.ord_meser_id = m.meser_id ' +
+                        'AND o.ord_cli_id = c.cli_id';
+
           const ordenes = await connection.query(query);
           res.json(ordenes);
       }

@@ -20,7 +20,7 @@
                 <v-icon @click="" small class="mr-3">
                     fas fa-pencil-alt
                 </v-icon>
-                <v-icon @click="" small>
+                <v-icon @click="eliminar_orden(item)" small>
                     fas fa-trash
                 </v-icon>
             </template>
@@ -36,21 +36,21 @@
                     <v-container>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field label="Mesa asignada" clearable required>
+                                <v-text-field v-model="nueva_orden.ord_mesa_id" label="Mesa asignada" clearable required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field label="Mesero encargado" clearable required>
+                                <v-text-field v-model="nueva_orden.ord_meser_id" label="Mesero encargado" clearable required>
                                 </v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field label="Cliente" clearable required>
+                                <v-text-field v-model="nueva_orden.ord_cli_id" label="Cliente" clearable required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field label="Estado de la orden" clearable required>
+                                <v-text-field v-model="nueva_orden.ord_estado" label="Estado de la orden" clearable required>
                                 </v-text-field>
                             </v-col>
                         </v-row>
@@ -58,7 +58,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="success" @click="">Guardar</v-btn>
+                    <v-btn color="success" @click="guardar_orden()">Guardar</v-btn>
                     <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
 
                 </v-card-actions>
@@ -88,25 +88,38 @@ export default { //Definir propiedades del archivo
 
 
           ],
-          ordenes: [{
-            ord_id: 1,
-            ord_mesa_id: 4,
-            ord_meser_id: 2,
-            ord_cli_id: 1,
-            ord_estado: 'Abierta'
-          },
-          {
-            ord_id: 2,
-            ord_mesa_id: 5,
-            ord_meser_id: 3,
-            ord_cli_id: 2,
-            ord_estado: 'Abierta'
-          }],
-          no_dialog: false
+          ordenes: [],
+          no_dialog: false,
+          nueva_orden:{
+              ord_mesa_id:'',
+              ord_meser_id:'',
+              ord_cli_id:'',
+              ord_estado:''
+          }
         }
     },
+    created(){
+        this.llenar_ordenes();
+    },
     methods:{
+        async llenar_ordenes(){
+            const api_data = await this.axios.get('ordenes/mostrar_ordenes');
+            this.ordenes = api_data.data;
+        },
+        async eliminar_orden(item){
+            const body = {
+                ord_id: item.ord_id
+            }
+            await this.axios.delete('ordenes/eliminar_orden', {data:body});
+            this.llenar_ordenes();
+        },
+        async guardar_orden(){
+            await this.axios.post('ordenes/nueva_orden', this.nueva_orden);
+            this.llenar_ordenes();
+            this.cancelar();
+        },
         cancelar(){
+            this.nueva_orden = {}
             this.no_dialog = false;
         }
     }

@@ -17,7 +17,7 @@
                 <v-icon @click="" small class="mr-3">
                   fas fa-pencil-alt
                 </v-icon>
-                <v-icon @click="" small>
+                <v-icon @click="eliminar_mesero(item)" small>
                     fas fa-trash
                 </v-icon>
             </template>
@@ -27,22 +27,22 @@
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-text-field label="Nombre" clearable required>
+                            <v-text-field v-model="nuevo_mesero.meser_nombre" label="Nombre" clearable required>
                             </v-text-field>
                         </v-row>
                         <v-row>
-                            <v-text-field label="Apellido paterno" clearable required>
+                            <v-text-field v-model="nuevo_mesero.meser_ap_pat" label="Apellido paterno" clearable required>
                             </v-text-field>
                         </v-row>
                         <v-row>
-                            <v-text-field label="Apellido materno" clearable>
+                            <v-text-field v-model="nuevo_mesero.meser_ap_mat" label="Apellido materno" clearable>
                             </v-text-field>
                         </v-row>
                     </v-container>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="success" @click="">Guardar</v-btn>
+                    <v-btn color="success" @click="guardar_mesero()">Guardar</v-btn>
                     <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
 
                 </v-card-actions>
@@ -70,23 +70,43 @@ export default { //Definir propiedades del archivo
 
 
           ],
-          meseros: [{
-            meser_id:1,
-            meser_nombre:'Juana',
-            meser_ap_pat: 'Montoya',
-            meser_ap_mat: 'Lopéz'
-          },
-          {
-            meser_id:2,
-            meser_nombre:'Jair',
-            meser_ap_pat: 'Chavéz',
-            meser_ap_mat: 'Islas'
-          }],
-          nm_dialog: false
+          meseros: [],
+          nm_dialog: false,
+          nuevo_mesero:{
+              meser_nombre:'',
+              meser_ap_pat:'',
+              meser_ap_mat:''
+          }
         }
     },
+    created(){
+        this.llenar_meseros();
+    },
+
     methods:{
+      async llenar_meseros(){
+          const api_data = await this.axios.get('meseros/mostrar_meseros');
+          this.meseros = api_data.data;
+      },
+
+      async eliminar_mesero(item){
+          console.log("FUNCIÓN ELIMINAR MESERO");
+          const body = {
+              meser_id: item.meser_id
+          }
+          await this.axios.delete('meseros/eliminar_mesero', {data:body});
+          this.llenar_meseros();
+      },
+
+      async guardar_mesero(){
+          await this.axios.post('meseros/nuevo_mesero', this.nuevo_mesero);
+          this.llenar_meseros();
+          this.cancelar();
+          console.log("FUNCION GUARDAR MESEROS");
+      },
+
       cancelar(){
+          this.nuevo_mesero = {}
           this.nm_dialog = false;
       }
 

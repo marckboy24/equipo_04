@@ -17,7 +17,7 @@
                 <v-icon @click="" small class="mr-3">
                   fas fa-pencil-alt
                 </v-icon>
-                <v-icon @click="" small>
+                <v-icon @click="eliminar_mesa(item)" small>
                     fas fa-trash
                 </v-icon>
             </template>
@@ -28,11 +28,11 @@
                     <v-container>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field label="Capacidad" clearable required>
+                                <v-text-field v-model="nueva_mesa.mesa_capacidad" label="Capacidad" clearable required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field label="Estado" clearable required>
+                                <v-text-field v-model="nueva_mesa.mesa_estado" label="Estado" clearable required>
                                 </v-text-field>
                             </v-col>
                         </v-row>
@@ -40,7 +40,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="success" @click="">Guardar</v-btn>
+                    <v-btn color="success" @click="guardar_mesa()">Guardar</v-btn>
                     <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
 
                 </v-card-actions>
@@ -67,21 +67,38 @@ export default { //Definir propiedades del archivo
 
 
           ],
-          mesas: [{
-            mesa_id: 1,
-            mesa_capacidad: 4,
-            mesa_estado: 'Disponible'
-          },
-          {
-            mesa_id: 2,
-            mesa_capacidad: 4,
-            mesa_estado: 'Disponible'
-          }],
-          nm_dialog: false
+          mesas: [],
+          nm_dialog: false,
+          nueva_mesa:{
+              mesa_capacidad:'',
+              mesa_estado:''
+          }
         }
     },
+    created(){
+        this.llenar_mesas();
+    },
     methods:{
+        async llenar_mesas(){
+            const api_data = await this.axios.get('mesa/mostrar_mesas');
+            this.mesas = api_data.data;
+        },
+        async eliminar_mesa(item){
+            const body = {
+                mesa_id: item.mesa_id
+            }
+            await this.axios.delete('mesa/eliminar_mesa', {data:body});
+            this.llenar_mesas();
+        },
+        async guardar_mesa(){
+
+            await this.axios.post('mesa/nueva_mesa', this.nueva_mesa);
+            this.llenar_mesas();
+            this.cancelar();
+            console.log("FUNCION GUARDAR MESA");
+        },
         cancelar(){
+            this.nueva_mesa = {}
             this.nm_dialog = false;
         }
     }

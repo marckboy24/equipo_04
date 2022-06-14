@@ -17,7 +17,7 @@
                 <v-icon @click="" small class="mr-3">
                   fas fa-pencil-alt
                 </v-icon>
-                <v-icon @click="" small>
+                <v-icon @click="eliminar_cliente(item)" small>
                     fas fa-trash
                 </v-icon>
             </template>
@@ -28,17 +28,17 @@
                     <v-container>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field label="Nombre" clearable required>
+                                <v-text-field v-model="nuevo_cliente.cli_nombre" label="Nombre" clearable required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field label="Cantidad de personas" clearable required>
+                                <v-text-field v-model="nuevo_cliente.cli_cantidad" label="Cantidad de personas" clearable required>
                                 </v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field label="Mesa asignada" required>
+                                <v-text-field v-model="nuevo_cliente.cli_mesa_id" label="Mesa asignada" required>
                                 </v-text-field>
                             </v-col>
                         </v-row>
@@ -46,7 +46,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="success" @click="">Guardar</v-btn>
+                    <v-btn color="success" @click="guardar_cliente()">Guardar</v-btn>
                     <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
 
                 </v-card-actions>
@@ -73,7 +73,12 @@ export default { //Definir propiedades del archivo
             { text: 'Acciones', value: 'actions', sortable:false}
           ],
           clientes: [],
-          nc_dialog: false
+          nc_dialog: false,
+          nuevo_cliente:{
+              cli_nombre:'',
+              cli_cantidad:'',
+              cli_mesa_id:''
+          }
         }
     },
     created(){
@@ -85,7 +90,21 @@ export default { //Definir propiedades del archivo
           const api_data = await this.axios.get('clientes/mostrar_clientes');
           this.clientes = api_data.data;
       },
+      async guardar_cliente(){
+          console.log("FUNCIÓN GUARDAR");
+          await this.axios.post('clientes/nuevo_cliente', this.nuevo_cliente);
+          this.llenar_clientes();
+          this.cancelar();
+      },
+      async eliminar_cliente(item){
+          const body = {
+              cli_id: item.cli_id
+          }
+          await this.axios.delete('clientes/eliminar_cliente', {data:body});
+          this.llenar_clientes();
+      },
       cancelar(){
+          this.nuevo_cliente = {}
           this.nc_dialog = false;
       }
 

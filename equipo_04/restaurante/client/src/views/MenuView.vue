@@ -144,31 +144,33 @@ export default { //Definir propiedades del archivo
             { text: 'Acciones', value: 'beb_actions', sortable:false}
           ],
 
-          comidas: [{
-            com_id: 1,
-            com_nombre:'Hamburguesa',
-            com_categoria: 'Carnes rojas',
-            com_porcion: '300',
-            com_precio: '80.00'
-          }],
+          comidas: [],
 
-          bebidas: [{
-            beb_id: 1,
-            beb_nombre:'Agua de horchata',
-            beb_categoria: 'Aguas',
-            beb_cantidad: '600',
-            beb_precio: '25.50'
-          }],
+          bebidas: [],
 
           nc_dialog: false,
-          nb_dialog: false
+          nb_dialog: false,
+          nueva_comida:{
+              com_nombre:'',
+              com_categoria:'',
+              com_porcion:'',
+              com_precio:''
+          }
         }
     },
+    created(){
+
+    },
     methods:{
+      async llenar_comidas(){
+          const api_data = await this.axios.get('menu/comida/mostrar_comidas');
+          this.comidas = api_data.data;
+      },
       cancelar_comida(){
           this.nc_dialog = false;
       },
       cancelar_bebida(){
+          this.nueva_comida = {}
           this.nb_dialog = false;
       }
 

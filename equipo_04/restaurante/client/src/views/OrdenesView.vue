@@ -14,7 +14,7 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{item}">
-              <v-icon @click="agregar_detalles(item)" small class="mr-3">
+              <v-icon @click="nd_dialog = true" small class="mr-3">
                   fas fa-plus
               </v-icon>
                 <v-icon @click="" small class="mr-3">
@@ -79,11 +79,34 @@
         <v-dialog v-model="nd_dialog" max-width="500px">
             <v-card>
                 <v-card-title>
-                    Agregar a orden
+                    Detalles de la orden
                     <v-spacer></v-spacer>
-                    <v-btn color="success" @click="agregar_renglon_comidas()">Agregar comida</v-btn>
+                    <v-col cols="6">
+                        <v-menu v-model="menu_fecha"
+                                :close-on-content-click="false"
+                                :nudge-right="40"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px">
+                                <template v-slot:activator="{on, attrs}">
+                                    <v-text-field v-model="det_orden.det_fecha"
+                                                  label="Fecha de expedición"
+                                                  prepend-icon="fas fa-calendar"
+                                                  readonly
+                                                  v-bind="attrs"
+                                                  v-on="on">
+                                </v-text-field>
+                              </template>
+                              <v-date-picker v-model="det_orden.det_fecha"
+                                          @input="menu_fecha= false">
+                              </v-date-picker>
+                          </v-menu>
+                      </v-col>
                 </v-card-title>
+
                 <v-card-text>
+                <v-spacer></v-spacer>
+                <v-btn color="success" @click="agregar_renglon()" class="mr-5">Agregar pedido</v-btn>
                     <v-container>
                         <v-row v-for="(comida, index) in det_orden" v-bin:key="index">
                             <v-col cols="12">
@@ -91,6 +114,16 @@
                                         :items="comidas"
                                         label="Seleccionar comida"
                                         v-model="comida.det_com_id"
+                                >
+                                </v-select>
+                            </v-col>
+                        </v-row>
+                        <v-row v-for="(bebida, index) in det_orden" v-bin:key="index">
+                            <v-col cols="12">
+                                <v-select
+                                        :items="bebidas"
+                                        label="Seleccionar bebida"
+                                        v-model="bebida.det_beb_id"
                                 >
                                 </v-select>
                             </v-col>
@@ -137,6 +170,7 @@ export default { //Definir propiedades del archivo
           comidas:[],
           bebidas:[],
           det_orden:[],
+          det_ord_id: '',
 
           no_dialog: false,
           nd_dialog: false,
@@ -193,7 +227,7 @@ export default { //Definir propiedades del archivo
             const api_data = await this.axios.get('comidas/mostrar_comidas');
             api_data.data.forEach((item) => {
                 this.comidas.push({
-                    text: item.com_nombre + ' - ' + item.com_precio,
+                    text: item.com_nombre + ' - $' + item.com_precio,
                     value: item.com_id
                 });
             });
@@ -202,7 +236,7 @@ export default { //Definir propiedades del archivo
           const api_data = await this.axios.get('bebidas/mostrar_bebidas');
           api_data.data.forEach((item) => {
               this.bebidas.push({
-                  text: item.beb_nombre + ' - ' + item.beb_precio,
+                  text: item.beb_nombre + ' - $' + item.beb_precio,
                   value: item.beb_id
               });
           });
@@ -211,6 +245,28 @@ export default { //Definir propiedades del archivo
         agregar_detalles(item){
             this.det_ord_id = item.ord_id;
             nd_dialog = true;
+        },
+
+        agregar_renglon(){
+            this.det_orden.push({
+                det_com_id: '',
+                det_beb_id: ''
+            });
+        },
+
+        async guardar_detalles(){
+            const body = {
+                det_ord_id: this.det_ord_id,
+                det_com_id: '',
+                det_beb_id: '',
+                det_fecha: ''
+            }
+            this.det_orden.forEach(async (comida, bebida) => {
+                body.det_com_id = comida.det_com_id;
+                body.det_beb_id = bebida.det_beb_id;
+                await this.axios.post('/ordenes/nuevo_detalles');
+            });
+            this.cancelar();
         },
 
         async llenar_ordenes(){
@@ -234,7 +290,8 @@ export default { //Definir propiedades del archivo
             console.log(await this.axios.post('ordenes/nueva_orden', this.nueva_orden));
         },
         cancelar(){
-            this.nueva_orden = {}
+            this.nueva_orden = {};
+            this.det_orden = [];
             this.no_dialog = false;
             this.nd_dialog = false;
         }

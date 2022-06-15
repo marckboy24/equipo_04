@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-data-table
+        <v-data-table dark
             :headers="headers"
             :items="ordenes"
             :items-per-page="5"
@@ -34,6 +34,7 @@
             </template>
         </v-data-table>
         <v-dialog v-model="no_dialog" max-width="500px">
+          <v-card>
             <v-card-title>Nueva orden</v-card-title>
                 <v-card-text>
                     <v-container>
@@ -75,6 +76,7 @@
                     <v-btn color="success" @click="guardar_orden()">Guardar</v-btn>
                     <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
                 </v-card-actions>
+            </v-card>
         </v-dialog>
         <v-dialog v-model="nd_dialog" max-width="500px">
             <v-card>
@@ -132,7 +134,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="success" @click="">Guardar</v-btn>
+                    <v-btn color="success" @click="guardar_detalles()">Guardar</v-btn>
                     <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
                 </v-card-actions>
             </v-card>
@@ -261,10 +263,11 @@ export default { //Definir propiedades del archivo
                 det_beb_id: '',
                 det_fecha: ''
             }
-            this.det_orden.forEach(async (comida, bebida) => {
-                body.det_com_id = comida.det_com_id;
-                body.det_beb_id = bebida.det_beb_id;
-                await this.axios.post('/ordenes/nuevo_detalles');
+            this.det_orden.forEach(async (obj) => {
+                body.det_com_id = obj.det_com_id;
+                body.det_beb_id = obj.det_beb_id;
+                body.det_fecha = obj.det_fecha;
+                await this.axios.post('ordenes/nuevo_detalles', body);
             });
             this.cancelar();
         },

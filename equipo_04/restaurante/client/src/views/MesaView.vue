@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-data-table
+        <v-data-table dark
             :headers="headers"
             :items="mesas"
             :items-per-page="5"
@@ -23,6 +23,7 @@
             </template>
         </v-data-table>
         <v-dialog v-model="nm_dialog" max-width="500px">
+          <v-card>
             <v-card-title>Nueva mesa</v-card-title>
                 <v-card-text>
                     <v-container>
@@ -44,6 +45,7 @@
                     <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
 
                 </v-card-actions>
+            </v-card>
         </v-dialog>
     </v-container>
 </template>

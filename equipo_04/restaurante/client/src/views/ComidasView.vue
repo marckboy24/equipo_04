@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-data-table
+        <v-data-table dark
             :headers="headers"
             :items="comidas"
             :items-per-page="5"
@@ -26,6 +26,7 @@
 
         <!--Cuadros de diálogo-->
         <v-dialog v-model="nc_dialog" max-width="500px">
+          <v-card>
             <v-card-title>Nueva comida</v-card-title>
                 <v-card-text>
                     <v-container>
@@ -54,6 +55,7 @@
                     <v-btn color="success" @click="guardar_comida()">Guardar</v-btn>
                     <v-btn color="error" @click="cancelar_comida()">Cancelar</v-btn>
                 </v-card-actions>
+          </v-card>
         </v-dialog>
     </v-container>
 </template>

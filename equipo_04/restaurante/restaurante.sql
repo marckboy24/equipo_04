@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS mesa(
     mesa_capacidad INT NOT NULL,
     mesa_estado ENUM('Disponible', 'Ocupado'),
     UNIQUE(mesa_id, mesa_capacidad),
-    PRIMARY KEY(mesa_id)
+    PRIMARY KEY(mesa_id) 	#Decidimos utilizar una llave primaria artificial porque es numerico el id siendo facil de 
+                            #interpretar y a su vez, el número de mesa es único
 );
 
 # Creación de tabla independiente "mesero"
@@ -19,7 +20,8 @@ CREATE TABLE IF NOT EXISTS mesero(
     meser_ap_pat VARCHAR(50) NOT NULL,
     meser_ap_mat VARCHAR(50),
     INDEX(meser_nombre),
-    PRIMARY KEY(meser_id)
+    PRIMARY KEY(meser_id) #Se decidió utilizar una llave primaria artificial porque es un atributo más sencillo de 
+							#identificar y asi es difícil confundirse si un mesero tuviera el mismo nombre y apellido
 );
 
 # Creación de la tabla independiente "comida"
@@ -30,7 +32,8 @@ CREATE TABLE IF NOT EXISTS comida(
     com_porcion INT COMMENT 'Porción medida en gramos',
     com_precio DECIMAL(7, 2) NOT NULL,
     INDEX(com_nombre),
-    PRIMARY KEY(com_id)
+    PRIMARY KEY(com_id) #Utilizamos una llave primaria artificial ya que es fácil de identificar por el id propio del sistema(restaurante)
+						#y así, que no exista confusión si una comida tiene nombre similar 
 );
 
  #Creación de la tabla independiente "bebida"
@@ -41,7 +44,8 @@ CREATE TABLE IF NOT EXISTS comida(
     beb_cantidad INT NOT NULL COMMENT 'Cantidad medida en mililitros',
     beb_precio DECIMAL(7, 2) NOT NULL,
     INDEX(beb_nombre),
-    PRIMARY KEY(beb_id)
+    PRIMARY KEY(beb_id) 	#Utilizamos una llave primaria artificial, ya que puede darse el caso que existan bebidas
+							#con nombres similares, por lo que, un identificador único facilitaría la ubicación de los registros
  );
 
 #Creación de la tabla ADICIONAL dependiente "clientes"
@@ -50,8 +54,8 @@ CREATE TABLE IF NOT EXISTS clientes(
     cli_nombre VARCHAR(50) NOT NULL COMMENT 'A que nombre se encuentra la mesa',
     cli_cantidad TINYINT NOT NULL,
     cli_mesa_id INT NOT NULL,
-    PRIMARY KEY(cli_id),
-    CONSTRAINT fk_mesa_clientes
+    PRIMARY KEY(cli_id),			#Se optó por usar una llave primaria artificial, ya que los clientes pueden compartir cosas en común,
+    CONSTRAINT fk_mesa_clientes		#mientras que si se ubican por un identificador único se evitan confusiones
 		FOREIGN KEY(cli_mesa_id)
         REFERENCES mesa(mesa_id)
         ON UPDATE CASCADE
@@ -66,8 +70,8 @@ CREATE TABLE IF NOT EXISTS orden(
     ord_cli_id INT NOT NULL,
     ord_estado ENUM('Abierta', 'Cerrada', 'Pagada', 'Cancelada') NOT NULL,
     UNIQUE(ord_id, ord_mesa_id, ord_meser_id, ord_cli_id),
-    PRIMARY KEY(ord_id),
-    CONSTRAINT fk_mesa_orden
+    PRIMARY KEY(ord_id),			#Utilizamos una llave artificial porque cada orden es única, además de que hacerlo por los
+    CONSTRAINT fk_mesa_orden		#atributos de la orden no es la mejor manera de identificar los registros para una llave primaria
 		FOREIGN KEY(ord_mesa_id)
         REFERENCES mesa(mesa_id)
         ON UPDATE CASCADE
@@ -91,9 +95,9 @@ CREATE TABLE IF NOT EXISTS detalles(
     det_com_id INT NOT NULL,
     det_beb_id INT NOT NULL,
 	det_fecha DATE NOT NULL,
-    PRIMARY KEY(det_ord_id, det_com_id, det_beb_id),
-    CONSTRAINT fk_orden_detalles
-		FOREIGN KEY(det_ord_id)
+    PRIMARY KEY(det_ord_id, det_com_id, det_beb_id),		#Elegimos una combinación de 3 llaves primarias artificiales
+    CONSTRAINT fk_orden_detalles							#porque así se puede identificar de forma única el detalle de la orden 
+		FOREIGN KEY(det_ord_id)								#dependiendo de las especificaciones ingresadas por el usuario
         REFERENCES orden(ord_id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
@@ -116,8 +120,8 @@ CREATE TABLE IF NOT EXISTS cuenta(
     cuen_fecha DATE NOT NULL,
     cuen_hora TIME NOT NULL,
     cuen_total DECIMAL(7, 2) NOT NULL,
-    PRIMARY KEY(cuen_ord_id),
-    CONSTRAINT fk_orden_cuenta
+    PRIMARY KEY(cuen_ord_id),					#Se eligió una llave primaria del tipo artificial porque cada orden genera solo una 
+    CONSTRAINT fk_orden_cuenta					#cuenta única, y por ende, no se puede repetir
 		FOREIGN KEY(cuen_ord_id)
         REFERENCES orden(ord_id)
         ON UPDATE CASCADE

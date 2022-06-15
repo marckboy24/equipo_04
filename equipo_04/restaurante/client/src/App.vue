@@ -25,12 +25,6 @@
     <v-main color="">
       <v-row class="my-5">
         <v-spacer></v-spacer>
-        <router-link :to="{ name: 'home'}" class="mr-5">
-          <v-icon small>
-              fas fa-pencil-alt
-          </v-icon>
-            Inicio
-        </router-link>
         <router-link :to="{ name: 'clientes'}" class="mr-5">Clientes</router-link>
         <router-link :to="{ name: 'ordenes'}" class="mr-5">Ordenes</router-link>
         <router-link :to="{ name: 'comidas'}" class="mr-5">Comidas</router-link>

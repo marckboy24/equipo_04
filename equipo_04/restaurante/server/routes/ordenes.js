@@ -55,4 +55,21 @@ router.post('/nueva_orden', async(req, res) => {
       }
 });
 
+router.post('/nuevo_detalles', async(req, res) => {
+  try{
+      const body = req.body;
+      const query = 'INSERT INTO detalles ' +
+                  '(det_ord_id, det_com_id, det_beb_id. det_fecha) ' +
+                  'VALUES(?, ?, ?, ?)';
+      await connection.query(query, [body.det_ord_id, body.det_com_id, body.det_beb_id, body.det_fecha]);
+      res.json('Ok, inserción de detalles con éxito');
+  }
+    catch(error){
+        res.json({
+            error:error
+        });
+    }
+    return;
+});
+
 module.exports = router;

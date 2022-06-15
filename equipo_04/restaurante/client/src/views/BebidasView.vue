@@ -33,16 +33,16 @@
                             </v-text-field>
                         </v-row>
                         <v-row>
-                            <v-text-field v-model="nueva_bebida.beb_categoria" label="Categoría" clearable required>
+                            <v-text-field v-model="nueva_bebida.beb_categoria" label="Categoría" clearable required hint="Aguas, Jugos, Refrescos, Cervezas, Coctelería">
                             </v-text-field>
                         </v-row>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_bebida.beb_cantidad" label="Cantidad" suffix="ml" clearable>
+                                <v-text-field v-model="nueva_bebida.beb_cantidad" type="number" label="Cantidad" suffix="ml" clearable>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_bebida.beb_precio" label="Precio" prefix="$" suffix="MXN" clearable>
+                                <v-text-field v-model="nueva_bebida.beb_precio" type="number" label="Precio" prefix="$" suffix="MXN" clearable>
                                 </v-text-field>
                             </v-col>
                         </v-row>

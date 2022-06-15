@@ -34,16 +34,16 @@
                             </v-text-field>
                         </v-row>
                         <v-row>
-                            <v-text-field v-model="nueva_comida.com_categoria" label="Categoría" clearable required>
+                            <v-text-field v-model="nueva_comida.com_categoria" label="Categoría" clearable required hint="Sopas, Ensaladas, Carnes rojas, Otras carnes, Postres">
                             </v-text-field>
                         </v-row>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_comida.com_porcion" label="Porción" suffix ="grs" clearable>
+                                <v-text-field v-model="nueva_comida.com_porcion" type="number" label="Porción" suffix ="grs" clearable>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_comida.com_precio" label="Precio" prefix="$" suffix="MXN" clearable>
+                                <v-text-field v-model="nueva_comida.com_precio" type="number" label="Precio" prefix="$" suffix="MXN" clearable>
                                 </v-text-field>
                             </v-col>
                         </v-row>

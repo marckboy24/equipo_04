@@ -5,33 +5,32 @@
       color="primary"
       dark
     >
+
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
+          alt="PQ Logo"
+          class="shrink"
           contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          src="../public/burguer.png"
           transition="scale-transition"
-          width="40"
+          width="90"
         />
+        <h2>PQ´s Dinner</h2>
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
       </div>
 
       <v-spacer></v-spacer>
     </v-app-bar>
 
-    <v-main>
+    <v-main color="">
       <v-row class="my-5">
         <v-spacer></v-spacer>
-        <router-link :to="{ name: 'home'}" class="mr-5">Inicio</router-link>
+        <router-link :to="{ name: 'home'}" class="mr-5">
+          <v-icon small>
+              fas fa-pencil-alt
+          </v-icon>
+            Inicio
+        </router-link>
         <router-link :to="{ name: 'clientes'}" class="mr-5">Clientes</router-link>
         <router-link :to="{ name: 'ordenes'}" class="mr-5">Ordenes</router-link>
         <router-link :to="{ name: 'comidas'}" class="mr-5">Comidas</router-link>
@@ -45,6 +44,10 @@
     </v-main>
   </v-app>
 </template>
+
+<style>
+
+</style>
 
 <script>
 

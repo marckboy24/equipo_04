@@ -3,7 +3,7 @@
       Acciones rápidas
           <v-data-table
               :headers="headers"
-              :items="desserts"
+              :items="query_one"
               :items-per-page="5"
               class="elevation-1"
               >
@@ -18,7 +18,8 @@ export default { //Definir propiedades del archivo
 
     data(){
         return{
-
+          headers: [],
+          query_one: []
         }
     },
     methods:{

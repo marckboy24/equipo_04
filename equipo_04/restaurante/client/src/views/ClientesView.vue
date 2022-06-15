@@ -32,7 +32,7 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nuevo_cliente.cli_cantidad" label="Cantidad de personas" clearable required>
+                                <v-text-field v-model="nuevo_cliente.cli_cantidad" type="number" label="Cantidad de personas" clearable required>
                                 </v-text-field>
                             </v-col>
                         </v-row>

@@ -28,11 +28,11 @@
                     <v-container>
                         <v-row>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_mesa.mesa_capacidad" label="Capacidad" clearable required>
+                                <v-text-field v-model="nueva_mesa.mesa_capacidad" type="number" min="1" label="Capacidad" clearable required>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_mesa.mesa_estado" label="Estado" clearable required>
+                                <v-text-field v-model="nueva_mesa.mesa_estado" label="Estado" clearable required hint="Disponible, Ocupado">
                                 </v-text-field>
                             </v-col>
                         </v-row>

@@ -14,7 +14,7 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{item}">
-              <v-icon @click="" small class="mr-3">
+              <v-icon @click="agregar_detalles(item)" small class="mr-3">
                   fas fa-plus
               </v-icon>
                 <v-icon @click="" small class="mr-3">
@@ -64,7 +64,7 @@
                                 </v-select>
                             </v-col>
                             <v-col cols="'6'">
-                                <v-text-field v-model="nueva_orden.ord_estado" label="Estado de la orden" clearable required>
+                                <v-text-field v-model="nueva_orden.ord_estado" label="Estado de la orden" clearable required hint="Abierta, Cerrada, Pagada, Cancelada">
                                 </v-text-field>
                             </v-col>
                         </v-row>
@@ -74,8 +74,35 @@
                     <v-spacer></v-spacer>
                     <v-btn color="success" @click="guardar_orden()">Guardar</v-btn>
                     <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
-
                 </v-card-actions>
+        </v-dialog>
+        <v-dialog v-model="nd_dialog" max-width="500px">
+            <v-card>
+                <v-card-title>
+                    Agregar a orden
+                    <v-spacer></v-spacer>
+                    <v-btn color="success" @click="agregar_renglon_comidas()">Agregar comida</v-btn>
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-row v-for="(comida, index) in det_orden" v-bin:key="index">
+                            <v-col cols="12">
+                                <v-select
+                                        :items="comidas"
+                                        label="Seleccionar comida"
+                                        v-model="comida.det_com_id"
+                                >
+                                </v-select>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="success" @click="">Guardar</v-btn>
+                    <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
+                </v-card-actions>
+            </v-card>
         </v-dialog>
     </v-container>
 </template>
@@ -106,11 +133,19 @@ export default { //Definir propiedades del archivo
           mesas: [],
           meseros: [],
           clientes: [],
+
+          comidas:[],
+          bebidas:[],
+          det_orden:[],
+
           no_dialog: false,
+          nd_dialog: false,
+          menu_fecha: false,
+
           nueva_orden:{
               ord_mesa_id:'',
-              ord_meser_encargado:'',
-              ord_cli_info:'',
+              ord_meser_id:'',
+              ord_cli_id:'',
               ord_estado:''
           }
         }
@@ -120,6 +155,9 @@ export default { //Definir propiedades del archivo
         this.llenar_mesas();
         this.llenar_meseros();
         this.llenar_clientes();
+
+        this.llenar_comidas();
+        this.llenar_bebidas();
 
     },
     methods:{
@@ -150,6 +188,31 @@ export default { //Definir propiedades del archivo
                 });
             });
         },
+
+        async llenar_comidas(){
+            const api_data = await this.axios.get('comidas/mostrar_comidas');
+            api_data.data.forEach((item) => {
+                this.comidas.push({
+                    text: item.com_nombre + ' - ' + item.com_precio,
+                    value: item.com_id
+                });
+            });
+        },
+        async llenar_bebidas(){
+          const api_data = await this.axios.get('bebidas/mostrar_bebidas');
+          api_data.data.forEach((item) => {
+              this.bebidas.push({
+                  text: item.beb_nombre + ' - ' + item.beb_precio,
+                  value: item.beb_id
+              });
+          });
+        },
+
+        agregar_detalles(item){
+            this.det_ord_id = item.ord_id;
+            nd_dialog = true;
+        },
+
         async llenar_ordenes(){
             const api_data = await this.axios.get('ordenes/mostrar_ordenes');
             this.ordenes = api_data.data;
@@ -162,16 +225,18 @@ export default { //Definir propiedades del archivo
             this.llenar_ordenes();
         },
         async guardar_orden(){
-
+            console.log(this.nueva_orden.ord_mesa_id);
             await this.axios.post('ordenes/nueva_orden', this.nueva_orden);
             this.llenar_ordenes();
             this.cancelar();
             console.log("FUNCIÓN GUARDAR ORDEN");
+            console.log(this.nueva_orden.data);
             console.log(await this.axios.post('ordenes/nueva_orden', this.nueva_orden));
         },
         cancelar(){
             this.nueva_orden = {}
             this.no_dialog = false;
+            this.nd_dialog = false;
         }
     }
   //components: { //Importar archivos desde otro directorio

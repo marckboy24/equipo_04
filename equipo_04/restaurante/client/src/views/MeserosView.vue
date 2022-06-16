@@ -1,10 +1,10 @@
 <template>
     <v-container>
-        <v-data-table dark
+        <v-data-table
             :headers="headers"
             :items="meseros"
             :items-per-page="5"
-            class="elevation-1"
+            class="elevation-19"
             >
             <template v-slot:top>
                 <v-toolbar flat>
@@ -64,11 +64,12 @@ export default { //Definir propiedades del archivo
               align: 'start',
               sortable: false,
               value: 'meser_id',
+              class: 'colscolor'
             },
-            { text: 'Nombre', value: 'meser_nombre' },
-            { text: 'Apellido paterno', value: 'meser_ap_pat' },
-            { text: 'Apellido materno', value: 'meser_ap_mat' },
-            { text: 'Acciones', value: 'actions', sortable:false}
+            { text: 'Nombre', value: 'meser_nombre', class: 'colscolor' },
+            { text: 'Apellido paterno', value: 'meser_ap_pat', class: 'colscolor' },
+            { text: 'Apellido materno', value: 'meser_ap_mat', class: 'colscolor' },
+            { text: 'Acciones', value: 'actions', sortable:false, class: 'colscolor'}
 
 
           ],

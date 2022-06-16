@@ -1,10 +1,10 @@
 <template>
     <v-container>
-        <v-data-table dark
+        <v-data-table
             :headers="headers"
             :items="bebidas"
             :items-per-page="5"
-            class="elevation-1"
+            class="elevation-19"
             >
             <template v-slot:top>
                 <v-toolbar flat>
@@ -71,12 +71,13 @@ export default { //Definir propiedades del archivo
               align: 'start',
               sortable: false,
               value: 'beb_id',
+              class: 'colscolor'
             },
-            { text: 'Nombre', value: 'beb_nombre' },
-            { text: 'Categoría', value: 'beb_categoria' },
-            { text: 'Cantidad (ml)', value: 'beb_cantidad' },
-            { text: 'Precio', value: 'beb_precio' },
-            { text: 'Acciones', value: 'actions', sortable:false}
+            { text: 'Nombre', value: 'beb_nombre', class: 'colscolor' },
+            { text: 'Categoría', value: 'beb_categoria', class: 'colscolor' },
+            { text: 'Cantidad (ml)', value: 'beb_cantidad', class: 'colscolor' },
+            { text: 'Precio', value: 'beb_precio', class: 'colscolor' },
+            { text: 'Acciones', value: 'actions', sortable:false, class: 'colscolor'}
           ],
 
           bebidas: [],

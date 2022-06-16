@@ -12,14 +12,15 @@ export default new Vuetify({
       },
     themes: {
       light: {
-        primary: '#1F618D',
-        secondary: '#424242',
+        primary: '#09B3B3',
+        secondary: '#09B3B3',
         accent: '#82B1FF',
         error: '#FF5252',
         info: '#2196F3',
         success: '#4CAF50',
         warning: '#FFC107',
-        bgcolor: '#404040'
+        bgcolor: '#424242',
+        colscolor: '#AAF2F2'
       },
     },
   },

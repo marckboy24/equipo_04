@@ -1,10 +1,10 @@
 <template>
     <v-container>
-        <v-data-table dark
+        <v-data-table
             :headers="headers"
             :items="mesas"
             :items-per-page="5"
-            class="elevation-1"
+            class="elevation-19"
             >
             <template v-slot:top>
                 <v-toolbar flat>
@@ -62,10 +62,11 @@ export default { //Definir propiedades del archivo
               align: 'start',
               sortable: false,
               value: 'mesa_id',
+              class:'colscolor'
             },
-            { text: 'Capacidad', value: 'mesa_capacidad' },
-            { text: 'Estado', value: 'mesa_estado' },
-            { text: 'Acciones', value: 'actions', sortable:false}
+            { text: 'Capacidad', value: 'mesa_capacidad', class:'colscolor' },
+            { text: 'Estado', value: 'mesa_estado', class:'colscolor' },
+            { text: 'Acciones', value: 'actions', sortable:false, class:'colscolor'}
 
 
           ],

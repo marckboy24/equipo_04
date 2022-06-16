@@ -1,4 +1,4 @@
-//bebidas.js: Archivo que gestiona todas las peticiones hacia la tabla "comida"
+//bebidas.js: Archivo que gestiona todas las peticiones hacia la tabla "bebida"
 const express = require('express');
 const router = express.Router();
 const connection = require('../connection');
@@ -15,7 +15,7 @@ router.get('/mostrar_bebidas', async(req, res) => {
           });
       }
       return;
-});
+}); 
 
 router.delete('/eliminar_bebida', async(req, res) => {
       try{

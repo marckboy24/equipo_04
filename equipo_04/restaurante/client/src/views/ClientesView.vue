@@ -1,12 +1,12 @@
 <template>
     <v-container>
-        <v-data-table dark
+        <v-data-table
             :headers="headers"
             :items="clientes"
             :items-per-page="5"
-            class="elevation-1"
+            class="elevation-19"
             >
-            <template v-slot:top>
+            <template  v-slot:top>
                 <v-toolbar flat>
                     <v-toolbar-title>Clientes</v-toolbar-title>
                     <v-spacer></v-spacer>
@@ -73,11 +73,12 @@ export default { //Definir propiedades del archivo
               align: 'start',
               sortable: false,
               value: 'cli_id',
+              class:'colscolor'
             },
-            { text: 'Nombre', value: 'cli_nombre' },
-            { text: 'Cantidad de personas', value: 'cli_cantidad' },
-            { text: 'Mesa del cliente(s)', value: 'cli_mesa_id' },
-            { text: 'Acciones', value: 'actions', sortable:false}
+            { text: 'Nombre', value: 'cli_nombre', class:'colscolor'},
+            { text: 'Cantidad de personas', value: 'cli_cantidad', class:'colscolor'},
+            { text: 'Mesa del cliente(s)', value: 'cli_mesa_id', class:'colscolor'},
+            { text: 'Acciones', value: 'actions', sortable:false, class:'colscolor'}
           ],
           clientes: [],
           mesas: [],
@@ -89,6 +90,7 @@ export default { //Definir propiedades del archivo
           }
         }
     },
+    
     created(){
         this.llenar_mesas();
         this.llenar_clientes();
@@ -99,7 +101,7 @@ export default { //Definir propiedades del archivo
           const api_data = await this.axios.get('mesa/mostrar_mesas');
           api_data.data.forEach((item) => {
               this.mesas.push({
-                  text: 'Mesa ' + item.mesa_id + ' (Capacidad: ' + item.mesa_capacidad + ' )',
+                  text: 'Mesa ' + item.mesa_id + ': '+ item.mesa_estado + ' (Capacidad: ' + item.mesa_capacidad + ' )',
                   value: item.mesa_id
               });
           });
@@ -126,7 +128,6 @@ export default { //Definir propiedades del archivo
           this.nuevo_cliente = {}
           this.nc_dialog = false;
       }
-
     }
   //components: { //Importar archivos desde otro directorio
   //  HelloWorld,
